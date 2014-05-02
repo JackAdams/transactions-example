@@ -1,0 +1,56 @@
+#wrapper {
+	display: inline-table;	
+	margin-top: 5px;
+}
+
+#buttons-wrapper {
+	float: right;
+	min-height: 60px;	
+}
+
+#undo-redo {
+	text-align: right;	
+}
+
+#instructions {
+	clear:right;	
+}
+
+table {
+	border-collapse:collapse;
+	margin-bottom: 20px;
+}
+
+table td {
+	border: 1px solid #000;
+	padding: 2px 6px;
+}
+
+table td.edit-field, table td.field-name {
+	width: 150px;	
+}
+
+table thead {
+	font-weight: bold;
+}
+
+table thead, table td:first-child {
+	background-color: #eee;
+}
+
+.delete-field {
+	cursor: pointer;
+	float: right;	
+}
+
+.edit-field {
+	cursor: cell;	
+}
+
+.delete {
+	cursor: pointer;	
+}
+
+#delete-documents {
+	float: right;	
+}

@@ -1,0 +1,63 @@
+<head>
+  <title>transactions-example</title>
+</head>
+
+<body>
+  <div class="container">
+    {{> demo}}
+  </div>
+</body>
+
+<template name="demo">
+  <div id="wrapper">
+    {{> loginButtons}}
+    <div id="buttons-wrapper">
+      {{> undoRedoButtons}}
+    </div>
+    <h2 id="instructions">Edit the documents below then use the undo/redo buttons</h2>
+    {{#unless currentUser}}
+      {{#unless loggingIn}}
+        <br />
+        <div class="alert alert-info">
+          <h4>Login using:</h4>
+          username: <strong>demo</strong><br />
+          password: <strong>password</strong><br /><br />
+          ... or create your own account so you have your own personal undo/redo stack
+        </div>
+      {{/unless}}
+    {{/unless}}
+    <br />
+    <div style="{{#unless currentUser}}opacity:0.3;{{/unless}}">
+      <table>
+        <thead>
+          <tr>
+            <td>Documents</td>
+            {{#each fieldNames}}
+              <td class="field-name">{{name}}<i class="delete-field fa fa-eraser" title="Clear this field"></i></td>
+            {{/each}}
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each documents}}
+            <tr>
+              <td>{{name}}</td>
+              {{#each fields}}
+                <td class="edit-field">
+                  {{#if editing}}
+                    <input type="text" value="{{value}}" id="edit-field" />
+                  {{else}}
+                    {{value}}
+                  {{/if}}
+                </td>
+              {{/each}}
+              <td class="delete"><i class="fa fa-times"></i></td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <input type="button" id="add-document" class="btn btn-info" value="Add new document" />
+      <input type="button" id="delete-documents" class="btn btn-danger" value="Remove all documents" />
+    </div>
+  </div>
+</template>
