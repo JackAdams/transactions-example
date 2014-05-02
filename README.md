@@ -1,0 +1,1 @@
+Example app showing the "transactions" package in action. Package repo [here](https://github.com/JackAdams/meteor-transactions).
