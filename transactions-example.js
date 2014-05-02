@@ -125,10 +125,10 @@ if (Meteor.isServer) {
   });
   
   // Clears out the transactions and documents collections every 24 hours -- DON'T PUT THIS IN YOUR APP!!!
-  var MyCron = new Cron(360000);
+  var MyCron = new Cron(3600000);
   MyCron.addJob(24, function() {
     Documents.remove({});
-	Transactions.remove({});
+	tx.Transactions.remove({});
   });
   
 }
