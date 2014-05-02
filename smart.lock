@@ -2,18 +2,12 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "transactions": {
-        "path": "../../meteor-packages/transactions"
-      },
       "font-awesome": {},
       "bootstrap-3": {},
       "cron-tick": {},
-      "accounts-ui-bootstrap-3": {}
+      "transactions": {}
     },
     "packages": {
-      "transactions": {
-        "path": "../../meteor-packages/transactions"
-      },
       "font-awesome": {
         "git": "https://github.com/nate-strauser/meteor-font-awesome.git",
         "tag": "v4.0.3",
@@ -29,10 +23,10 @@
         "tag": "v0.0.4",
         "commit": "44cff9116af510fe53704fdeeff57c444ceb75ba"
       },
-      "accounts-ui-bootstrap-3": {
-        "git": "https://github.com/mangasocial/meteor-accounts-ui-bootstrap-3.git",
-        "tag": "v0.3.0-1",
-        "commit": "93ffa5d0e325dc7026de89f6d90c178fa04bdd3a"
+      "transactions": {
+        "git": "https://github.com/JackAdams/meteor-transactions.git",
+        "tag": "v0.1.0",
+        "commit": "4c729198cc98c77c84df83830823a28360a1ac4d"
       }
     }
   }

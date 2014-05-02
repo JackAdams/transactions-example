@@ -1,11 +1,8 @@
 {
   "packages": {
-    "transactions": {
-      "path": "/Users/babrahams/meteor-packages/transactions"
-    },
     "font-awesome": {},
     "bootstrap-3": {},
     "cron-tick": {},
-    "accounts-ui-bootstrap-3": {}
+    "transactions": {}
   }
 }

@@ -4,9 +4,9 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-transactions
 accounts-password
 font-awesome
 bootstrap-3
 cron-tick
 accounts-ui
+transactions
