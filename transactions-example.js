@@ -77,9 +77,6 @@ if (Meteor.isClient) {
 	   });
        tx.insert(Documents,newDoc);
     },
-	'click input#edit-field': function (evt,tmpl) {
-       evt.stopPropagation(); 
-    },
 	'click td.edit-field' : function (evt,tmpl) {
 	   if (Meteor.user()) {
 	     Session.set('fieldBeingEdited',this.document_id + '_' + this.field);
