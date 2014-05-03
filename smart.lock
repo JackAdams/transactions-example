@@ -25,8 +25,8 @@
       },
       "transactions": {
         "git": "https://github.com/JackAdams/meteor-transactions.git",
-        "tag": "v0.1.0",
-        "commit": "4c729198cc98c77c84df83830823a28360a1ac4d"
+        "tag": "v0.1.5",
+        "commit": "8483d33a9783f23cf71eccdb747e5c8d04c667af"
       }
     }
   }

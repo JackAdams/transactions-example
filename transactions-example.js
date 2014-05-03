@@ -51,7 +51,7 @@ if (Meteor.isClient) {
 	
   Template.demo.helpers({
 	'documents' : function() {
-      return Documents.find({deleted:{$exists:false}});
+      return Documents.find({deleted:{$exists:false}},{sort:{createdAt:1}});
 	},
 	'fieldNames' : function () {
 	  return fieldNames();
@@ -69,7 +69,13 @@ if (Meteor.isClient) {
 
   Template.demo.events({
     'click input#add-document': function (evt,tmpl) {
-       tx.insert(Documents,{name:'Document ' + (Documents.find().count() + 1)});
+	   var newDoc = {name:'Document ' + (Documents.find().count() + 1),createdAt:Date.now()};
+	   _.each(fieldNames(),function(fieldName) {
+	     if (Math.random() < 0.5) {
+		   newDoc[fieldName.field] = (Math.random() < 0.5) ? "Click to edit" : (Math.floor((Math.random()) * 100000) + 10000).toString();
+		 }
+	   });
+       tx.insert(Documents,newDoc);
     },
 	'click input#edit-field': function (evt,tmpl) {
        evt.stopPropagation(); 

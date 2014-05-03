@@ -1,6 +1,7 @@
 #wrapper {
 	display: inline-table;	
 	margin-top: 5px;
+	text-align:left;
 }
 
 #buttons-wrapper {
@@ -23,11 +24,12 @@ table {
 
 table td {
 	border: 1px solid #000;
-	padding: 2px 6px;
+	padding: 0px 6px;
+	height: 30px;
 }
 
 table td.edit-field, table td.field-name {
-	width: 150px;	
+	width: 162px;	
 }
 
 table thead {
