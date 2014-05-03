@@ -102,14 +102,21 @@ if (Meteor.isClient) {
 	'click .delete' : function() {
 	  tx.remove(Documents,this._id);	
 	},
-	'click .delete-field' : function() {
+	'click .clear-field' : function() {
 	  var self = this;
+	  var atLeastOneNonEmpty = false;
 	  var modifier = {};
 	  modifier[self.field] = '';
 	  tx.start('clear ' + this.name);
 	  _.each(Documents.find({deleted:{$exists:false}}).fetch(),function(doc) {
+		if (doc[self.field] !== '') {
+		  atLeastOneNonEmpty = true;
+		}
 		tx.update(Documents,doc,{$set:modifier});
 	  });
+	  if (!atLeastOneNonEmpty) {
+		tx.cancel();  
+	  }
 	  tx.commit();
 	},
 	'click #delete-documents' : function() {

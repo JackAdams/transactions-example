@@ -40,7 +40,13 @@ table thead, table td:first-child {
 	background-color: #eee;
 }
 
-.delete-field {
+table input {
+	margin: 0;
+	padding: 0;
+	border: 0;	
+}
+
+.clear-field {
 	cursor: pointer;
 	float: right;	
 }
