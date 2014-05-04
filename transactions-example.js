@@ -55,6 +55,9 @@ if (Meteor.isClient) {
 	'documents' : function() {
       return Documents.find({deleted:{$exists:false}},{sort:{createdAt:1}});
 	},
+	'documentCount' : function() {
+      return Documents.find({deleted:{$exists:false}}).count();
+	},
 	'fieldNames' : function () {
 	  return fieldNames();
 	},

@@ -58,7 +58,7 @@
         </tbody>
       </table>
       <input type="button" id="add-document" class="btn btn-info" value="Add new document" />
-      <input type="button" id="delete-documents" class="btn btn-danger" value="Remove all documents" />
+      {{#if documentCount}}<input type="button" id="delete-documents" class="btn btn-danger" value="Remove all documents" />{{/if}}
     </div>
   </div>
 </template>
