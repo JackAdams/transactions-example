@@ -26,11 +26,13 @@ tx.checkPermission = function(action,collection,doc,updates) { return checkPermi
 
 Meteor.methods({
   'removeAll' : function() {
-	tx.start('remove all documents');
-	_.each(Documents.find({deleted:{$exists:false}}).fetch(), function(doc) {
-	  tx.remove(Documents,doc);
-	});
-	tx.commit();  
+	if (Documents.find({deleted:{$exists:false}}).count()) {
+      tx.start('remove all documents');
+	  _.each(Documents.find({deleted:{$exists:false}}).fetch(), function(doc) {
+	    tx.remove(Documents,doc);
+	  });
+	  tx.commit();
+	}
   }
 });
 
