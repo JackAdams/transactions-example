@@ -83,7 +83,7 @@ if (Meteor.isClient) {
        tx.insert(Documents,newDoc);
     },
 	'click td.edit-field' : function (evt,tmpl) {
-	   if (Meteor.user()) {
+	   if (Meteor.user() && !Session.equals('fieldBeingEdited',this.document_id + '_' + this.field)) {
 	     Session.set('fieldBeingEdited',this.document_id + '_' + this.field);
 	     Deps.flush();
 	     $('#edit-field').focus().select();
