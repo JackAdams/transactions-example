@@ -48,9 +48,6 @@ Meteor.methods({
 	  });
 	  tx.commit();
 	}
-  },
-  'addNewDoc' : function() {
-    tx.insert(Documents,makeNewDoc());
   }
 });
 
@@ -87,7 +84,7 @@ if (Meteor.isClient) {
 
   Template.demo.events({
     'click input#add-document': function (evt,tmpl) {
-	   Meteor.call('addNewDoc');
+	   tx.insert(Documents,makeNewDoc());
     },
 	'click td.edit-field' : function (evt,tmpl) {
 	   if (Meteor.user() && !Session.equals('fieldBeingEdited',this.document_id + '_' + this.field)) {
