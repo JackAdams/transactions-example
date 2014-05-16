@@ -23,7 +23,22 @@ tx.checkPermission = function(action,collection,doc,updates) { return checkPermi
 // ***
 // App
 // ***
+  
+fieldNames = function() {
+  var fieldNames = _.map(_.range(5), function(fieldNumber) { return {field: 'field' + (fieldNumber + 1), name:'Field ' + (fieldNumber + 1)}; });
+  return fieldNames;  
+}
 
+makeNewDoc = function() {
+  var newDoc = {name:'Document ' + (Documents.find().count() + 1),createdAt:Date.now()};
+  _.each(fieldNames(),function(fieldName) {
+   if (Math.random() < 0.5) {
+	 newDoc[fieldName.field] = (Math.random() < 0.5) ? "Click to edit" : (Math.floor((Math.random()) * 100000) + 10000).toString();
+   }
+  });
+  return newDoc;
+}
+  
 Meteor.methods({
   'removeAll' : function() {
 	if (Documents.find({deleted:{$exists:false}}).count()) {
@@ -33,6 +48,9 @@ Meteor.methods({
 	  });
 	  tx.commit();
 	}
+  },
+  'addNewDoc' : function() {
+    tx.insert(Documents,makeNewDoc());
   }
 });
 
@@ -45,11 +63,6 @@ if (Meteor.isClient) {
   Meteor.subscribe('documents');
   
   Session.setDefault('fieldBeingEdited',null);
-  
-  fieldNames = function() {
-	var fieldNames = _.map(_.range(5), function(fieldNumber) { return {field: 'field' + (fieldNumber + 1), name:'Field ' + (fieldNumber + 1)}; });
-	return fieldNames;  
-  }
 	
   Template.demo.helpers({
 	'documents' : function() {
@@ -74,13 +87,7 @@ if (Meteor.isClient) {
 
   Template.demo.events({
     'click input#add-document': function (evt,tmpl) {
-	   var newDoc = {name:'Document ' + (Documents.find().count() + 1),createdAt:Date.now()};
-	   _.each(fieldNames(),function(fieldName) {
-	     if (Math.random() < 0.5) {
-		   newDoc[fieldName.field] = (Math.random() < 0.5) ? "Click to edit" : (Math.floor((Math.random()) * 100000) + 10000).toString();
-		 }
-	   });
-       tx.insert(Documents,newDoc);
+	   Meteor.call('addNewDoc');
     },
 	'click td.edit-field' : function (evt,tmpl) {
 	   if (Meteor.user() && !Session.equals('fieldBeingEdited',this.document_id + '_' + this.field)) {
@@ -139,11 +146,20 @@ if (Meteor.isServer) {
 	return Documents.find(); 
   });
   
-  // Clears out the transactions and documents collections every 24 hours -- DON'T PUT THIS IN YOUR APP!!!
+  var resetDocs = function() {
+    // Clears out the transactions and documents collections every 24 hours -- DON'T PUT THIS IN YOUR APP!!!
+	Documents.remove({});
+	tx.Transactions.remove({});
+	// Put in seven new docs
+	for (i = 1; i <= 7; i++) {
+	  Documents.insert(makeNewDoc());
+	}
+  }
   var MyCron = new Cron(3600000);
   MyCron.addJob(24, function() {
-    Documents.remove({});
-	tx.Transactions.remove({});
+    resetDocs();
   });
+  
+  resetDocs();
   
 }
