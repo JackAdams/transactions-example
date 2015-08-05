@@ -6,8 +6,7 @@
 meteor-platform
 mrt:cron-tick
 mizzao:bootstrap-3
-babrahams:transactions
 natestrauser:font-awesome
 accounts-password
 accounts-ui
-
+babrahams:undo-redo
