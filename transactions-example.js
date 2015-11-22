@@ -18,7 +18,7 @@ checkPermission = function(userId,doc) {
 
 tx.collectionIndex = {'documents': Documents}; // This is compulsory for the transactions to work
 
-tx.checkPermission = function(action,collection,doc,updates) { return checkPermission(Meteor.userId(),doc); }; // Note -- we're using the same function here that we use for our allow and deny rules
+tx.checkPermission = function(action, collection, doc, updates) { return checkPermission(Meteor.userId(), doc); }; // Note -- if we were using allow and deny rules, we'd use the same function that we use here
 
 // ***
 // App
@@ -30,7 +30,7 @@ fieldNames = function() {
 }
 
 makeNewDoc = function() {
-  var newDoc = {name:'Document ' + (Documents.find().count() + 1),createdAt:Date.now()};
+  var newDoc = {name: 'Document ' + (Documents.find().count() + 1), createdAt: Date.now()};
   _.each(fieldNames(),function(fieldName) {
    if (Math.random() < 0.5) {
 	 newDoc[fieldName.field] = (Math.random() < 0.5) ? "Click to edit" : (Math.floor((Math.random()) * 100000) + 10000).toString();
@@ -41,10 +41,10 @@ makeNewDoc = function() {
   
 Meteor.methods({
   'removeAll' : function() {
-	if (Documents.find({deleted:{$exists:false}}).count()) {
+	if (Documents.find({deleted: {$exists: false}}).count()) {
       tx.start('remove all documents');
-	  _.each(Documents.find({deleted:{$exists:false}}).fetch(), function(doc) {
-	    tx.remove(Documents,doc);
+	  _.each(Documents.find({deleted: {$exists: false}}).fetch(), function(doc) {
+	    tx.remove(Documents, doc);
 	  });
 	  tx.commit();
 	}
@@ -63,18 +63,18 @@ if (Meteor.isClient) {
 	
   Template.demo.helpers({
 	'documents' : function() {
-      return Documents.find({deleted:{$exists:false}},{sort:{createdAt:1}});
+      return Documents.find({deleted: {$exists: false}}, {sort: {createdAt: 1}});
 	},
 	'documentCount' : function() {
-      return Documents.find({deleted:{$exists:false}}).count();
+      return Documents.find({deleted: {$exists: false}}).count();
 	},
 	'fieldNames' : function () {
 	  return fieldNames();
 	},
 	'fields' : function() {
 	  var self = this;
-	  return _.map(fieldNames(), function(fieldName,index) {
-		return {document_id:self._id,field:fieldName.field,value:self[fieldName.field] || ''};
+	  return _.map(fieldNames(), function(fieldName, index) {
+		return {document_id: self._id, field: fieldName.field, value: self[fieldName.field] || ''};
 	  });
 	},
 	'editing' : function() {
@@ -83,17 +83,17 @@ if (Meteor.isClient) {
   });
 
   Template.demo.events({
-    'click input#add-document': function (evt,tmpl) {
-	   tx.insert(Documents,makeNewDoc());
+    'click input#add-document': function (evt, tmpl) {
+	   Documents.insert(makeNewDoc(), {tx: true});
     },
-	'click td.edit-field' : function (evt,tmpl) {
-	   if (Meteor.user() && !Session.equals('fieldBeingEdited',this.document_id + '_' + this.field)) {
-	     Session.set('fieldBeingEdited',this.document_id + '_' + this.field);
+	'click td.edit-field' : function (evt, tmpl) {
+	   if (Meteor.user() && !Session.equals('fieldBeingEdited', this.document_id + '_' + this.field)) {
+	     Session.set('fieldBeingEdited', this.document_id + '_' + this.field);
 	     Deps.flush();
 	     $('#edit-field').focus().select();
 	   }
 	},
-	'keydown input#edit-field, focusout input#edit-field' : function(evt,tmpl) {
+	'keydown input#edit-field, focusout input#edit-field' : function(evt, tmpl) {
 	  if (evt.type === 'keydown' && evt.which !== 13) {
 		return;  
 	  }
@@ -101,12 +101,12 @@ if (Meteor.isClient) {
 	  if (val !== this.value) {
 	    var modifier = {};
 		modifier[this.field] = val;
-	    tx.update(Documents,this.document_id,{$set:modifier});
+	    Documents.update({_id: this.document_id}, {$set: modifier}, {tx: true});
 	  }
 	  Session.set('fieldBeingEdited',null);
 	},
 	'click .delete' : function() {
-	  tx.remove(Documents,this._id);	
+	  Documents.remove({_id: this._id}, {tx: true});	
 	},
 	'click .clear-field' : function() {
 	  var self = this;
@@ -114,11 +114,11 @@ if (Meteor.isClient) {
 	  var modifier = {};
 	  modifier[self.field] = '';
 	  tx.start('clear ' + this.name);
-	  _.each(Documents.find({deleted:{$exists:false}}).fetch(),function(doc) {
+	  _.each(Documents.find({deleted: {$exists: false}}).fetch(), function(doc) {
 		if (doc[self.field] !== '') {
 		  atLeastOneNonEmpty = true;
 		}
-		tx.update(Documents,doc,{$set:modifier});
+		Documents.update({_id: doc._id}, {$set: modifier}, {tx: true});
 	  });
 	  if (!atLeastOneNonEmpty) {
 		tx.cancel();  
@@ -133,11 +133,13 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   
-  Documents.allow({
-	insert: function(userId,doc) { return checkPermission(userId, doc); },
-	update: function(userId,doc, fields, modifier) { return checkPermission(userId, doc); },
-	remove: function(userId,doc) { return checkPermission(userId, doc); }
-  });
+  // If we were using allow/deny rules to allow {tx:true, instant: true} actions on the client, they would look something like this:
+  
+  /*Documents.allow({
+	insert: function(userId, doc) { return checkPermission(userId, doc); },
+	update: function(userId, doc, fields, modifier) { return checkPermission(userId, doc); },
+	remove: function(userId, doc) { return checkPermission(userId, doc); }
+  });*/
   
   Meteor.publish('documents',function() {
 	return Documents.find(); 
