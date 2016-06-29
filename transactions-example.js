@@ -150,11 +150,10 @@ if (Meteor.isServer) {
 	Documents.remove({});
 	tx.Transactions.remove({});
 	Meteor.users.remove({});
-	Meteor.users.insert({
-	  _id: 'MdnjqMMjt6z9DgTby',
-	  createdAt: Date.now(),
-	  services: { password: { bcrypt: '$2a$10$Lrb93v7FnmJ8WF6H8i1Ft.S0/q1jrRCJUCuAEObVTvXuWjXaF1J/q' } },
-	  username: 'demo'
+	Accounts.createUser({
+	  password: "password",
+	  email: "test@test.com",
+	  username: "demo"
 	});
 	// Put in seven new docs
 	for (i = 1; i <= 7; i++) {
