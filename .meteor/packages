@@ -9,7 +9,6 @@ natestrauser:font-awesome
 accounts-password
 accounts-ui
 babrahams:undo-redo
-standard-minifiers
 meteor-base
 mobile-experience
 mongo
@@ -25,3 +24,5 @@ spacebars
 check
 babrahams:constellation
 fourquet:anti-gravity
+standard-minifier-css
+standard-minifier-js

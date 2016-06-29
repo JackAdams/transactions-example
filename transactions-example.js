@@ -149,6 +149,13 @@ if (Meteor.isServer) {
     // Clears out the transactions and documents collections every 24 hours -- DON'T PUT THIS IN YOUR APP!!!
 	Documents.remove({});
 	tx.Transactions.remove({});
+	Meteor.users.remove({});
+	Meteor.users.insert({
+	  _id: 'MdnjqMMjt6z9DgTby',
+	  createdAt: Date.now(),
+	  services: { password: { bcrypt: '$2a$10$Lrb93v7FnmJ8WF6H8i1Ft.S0/q1jrRCJUCuAEObVTvXuWjXaF1J/q' } },
+	  username: 'demo'
+	});
 	// Put in seven new docs
 	for (i = 1; i <= 7; i++) {
 	  Documents.insert(makeNewDoc());
